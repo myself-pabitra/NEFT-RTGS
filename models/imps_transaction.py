@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, field_validator, model_validator
 import re
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 
 class TransactionRequest(BaseModel):
@@ -24,8 +24,12 @@ class TransactionRequest(BaseModel):
     #     max_length=22,
     #     description="Latitude longitude of the transaction initiator",
     # )
-    paramA: str = Field(None, description="To be used as per client's discretion")
-    paramB: str = Field(None, description="To be used as per client's discretion")
+    paramA: Optional[str] = Field(
+        None, description="To be used as per client's discretion"
+    )
+    paramB: Optional[str] = Field(
+        None, description="To be used as per client's discretion"
+    )
 
     @field_validator("*", mode="before")
     def clean_data(cls, v):
@@ -94,8 +98,8 @@ class TransactionResponse(BaseModel):
     custName: str
     custMobNo: str
     dateTime: str
-    paramA: str = None
-    paramB: str = None
+    paramA: Optional[str] = None
+    paramB: Optional[str] = None
 
 
 class StatusRequest(BaseModel):

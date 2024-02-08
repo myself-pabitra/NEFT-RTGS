@@ -1,0 +1,900 @@
+[2024-02-07 05:47:06 +0000] [3482422] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['0.0.0.0:8888']
+  backlog: 2048
+  workers: 2
+  worker_class: uvicorn.workers.UvicornWorker
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 60
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/ec2-user/NEFT-RTGS
+  daemon: True
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1000
+  group: 1000
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: /home/ec2-user/NEFT-RTGS/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s
+  errorlog: /home/ec2-user/NEFT-RTGS/error.log
+  loglevel: debug
+  capture_output: True
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: True
+  syslog_prefix: gunicorn
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: main:app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f882f7a36a0>
+  on_reload: <function OnReload.on_reload at 0x7f882f7a37e0>
+  when_ready: <function WhenReady.when_ready at 0x7f882f7a3920>
+  pre_fork: <function Prefork.pre_fork at 0x7f882f7a3b00>
+  post_fork: <function Postfork.post_fork at 0x7f882f7a3c40>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f882f7a3d80>
+  worker_int: <function WorkerInt.worker_int at 0x7f882f7a3ec0>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f882f7c8040>
+  pre_exec: <function PreExec.pre_exec at 0x7f882f7c8180>
+  pre_request: <function PreRequest.pre_request at 0x7f882f7c82c0>
+  post_request: <function PostRequest.post_request at 0x7f882f7c8360>
+  child_exit: <function ChildExit.child_exit at 0x7f882f7c84a0>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f882f7c85e0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f882f7c8720>
+  on_exit: <function OnExit.on_exit at 0x7f882f7c8860>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f882f7c8a40>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2024-02-07 05:47:06 +0000] [3482422] [INFO] Starting gunicorn 21.2.0
+[2024-02-07 05:47:06 +0000] [3482422] [DEBUG] Arbiter booted
+[2024-02-07 05:47:06 +0000] [3482422] [INFO] Listening at: http://0.0.0.0:8888 (3482422)
+[2024-02-07 05:47:06 +0000] [3482422] [INFO] Using worker: uvicorn.workers.UvicornWorker
+[2024-02-07 05:47:06 +0000] [3482439] [INFO] Booting worker with pid: 3482439
+[2024-02-07 05:47:06 +0000] [3482469] [INFO] Booting worker with pid: 3482469
+[2024-02-07 05:47:06 +0000] [3482422] [DEBUG] 2 workers
+[2024-02-07 05:47:07 +0000] [3482439] [INFO] Started server process [3482439]
+[2024-02-07 05:47:07 +0000] [3482439] [INFO] Waiting for application startup.
+[2024-02-07 05:47:07 +0000] [3482439] [INFO] Application startup complete.
+[2024-02-07 05:47:07 +0000] [3482469] [INFO] Started server process [3482469]
+[2024-02-07 05:47:07 +0000] [3482469] [INFO] Waiting for application startup.
+[2024-02-07 05:47:07 +0000] [3482469] [INFO] Application startup complete.
+[2024-02-07 05:51:36 +0000] [3482422] [INFO] Handling signal: term
+[2024-02-07 05:51:36 +0000] [3482469] [INFO] Shutting down
+[2024-02-07 05:51:36 +0000] [3482469] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-07 05:51:36 +0000] [3482439] [INFO] Shutting down
+[2024-02-07 05:51:36 +0000] [3482439] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-07 05:51:36 +0000] [3482469] [INFO] Waiting for application shutdown.
+[2024-02-07 05:51:36 +0000] [3482469] [INFO] Application shutdown complete.
+[2024-02-07 05:51:36 +0000] [3482469] [INFO] Finished server process [3482469]
+[2024-02-07 05:51:36 +0000] [3482469] [INFO] Worker exiting (pid: 3482469)
+[2024-02-07 05:51:36 +0000] [3482439] [INFO] Waiting for application shutdown.
+[2024-02-07 05:51:37 +0000] [3482439] [INFO] Application shutdown complete.
+[2024-02-07 05:51:37 +0000] [3482439] [INFO] Finished server process [3482439]
+[2024-02-07 05:51:37 +0000] [3482439] [INFO] Worker exiting (pid: 3482439)
+[2024-02-07 05:51:37 +0000] [3482422] [INFO] Shutting down: Master
+[2024-02-07 05:53:04 +0000] [3483737] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['0.0.0.0:8888']
+  backlog: 2048
+  workers: 2
+  worker_class: uvicorn.workers.UvicornWorker
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 60
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/ec2-user/NEFT-RTGS
+  daemon: True
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1000
+  group: 1000
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: /home/ec2-user/NEFT-RTGS/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s
+  errorlog: /home/ec2-user/NEFT-RTGS/error.log
+  loglevel: debug
+  capture_output: True
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: True
+  syslog_prefix: gunicorn
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: main:app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f76f9a0f6a0>
+  on_reload: <function OnReload.on_reload at 0x7f76f9a0f7e0>
+  when_ready: <function WhenReady.when_ready at 0x7f76f9a0f920>
+  pre_fork: <function Prefork.pre_fork at 0x7f76f9a0fb00>
+  post_fork: <function Postfork.post_fork at 0x7f76f9a0fc40>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f76f9a0fd80>
+  worker_int: <function WorkerInt.worker_int at 0x7f76f9a0fec0>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f76f9a34040>
+  pre_exec: <function PreExec.pre_exec at 0x7f76f9a34180>
+  pre_request: <function PreRequest.pre_request at 0x7f76f9a342c0>
+  post_request: <function PostRequest.post_request at 0x7f76f9a34360>
+  child_exit: <function ChildExit.child_exit at 0x7f76f9a344a0>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f76f9a345e0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f76f9a34720>
+  on_exit: <function OnExit.on_exit at 0x7f76f9a34860>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f76f9a34a40>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2024-02-07 05:53:04 +0000] [3483737] [INFO] Starting gunicorn 21.2.0
+[2024-02-07 05:53:04 +0000] [3483737] [DEBUG] Arbiter booted
+[2024-02-07 05:53:04 +0000] [3483737] [INFO] Listening at: http://0.0.0.0:8888 (3483737)
+[2024-02-07 05:53:04 +0000] [3483737] [INFO] Using worker: uvicorn.workers.UvicornWorker
+[2024-02-07 05:53:04 +0000] [3483739] [INFO] Booting worker with pid: 3483739
+[2024-02-07 05:53:04 +0000] [3483740] [INFO] Booting worker with pid: 3483740
+[2024-02-07 05:53:04 +0000] [3483737] [DEBUG] 2 workers
+[2024-02-07 05:53:06 +0000] [3483739] [INFO] Started server process [3483739]
+[2024-02-07 05:53:06 +0000] [3483739] [INFO] Waiting for application startup.
+[2024-02-07 05:53:06 +0000] [3483739] [INFO] Application startup complete.
+[2024-02-07 05:53:06 +0000] [3483740] [INFO] Started server process [3483740]
+[2024-02-07 05:53:06 +0000] [3483740] [INFO] Waiting for application startup.
+[2024-02-07 05:53:06 +0000] [3483740] [INFO] Application startup complete.
+Database connected successfully..
+Database connected successfully..
+[2024-02-07 06:01:35 +0000] [3483737] [INFO] Handling signal: term
+[2024-02-07 06:01:35 +0000] [3483740] [INFO] Shutting down
+[2024-02-07 06:01:35 +0000] [3483740] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-07 06:01:35 +0000] [3483739] [INFO] Shutting down
+[2024-02-07 06:01:35 +0000] [3483739] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-07 06:01:35 +0000] [3483740] [INFO] Waiting for application shutdown.
+[2024-02-07 06:01:35 +0000] [3483740] [INFO] Application shutdown complete.
+[2024-02-07 06:01:35 +0000] [3483740] [INFO] Finished server process [3483740]
+[2024-02-07 06:01:35 +0000] [3483740] [INFO] Worker exiting (pid: 3483740)
+[2024-02-07 06:01:35 +0000] [3483739] [INFO] Waiting for application shutdown.
+[2024-02-07 06:01:35 +0000] [3483739] [INFO] Application shutdown complete.
+[2024-02-07 06:01:35 +0000] [3483739] [INFO] Finished server process [3483739]
+[2024-02-07 06:01:35 +0000] [3483739] [INFO] Worker exiting (pid: 3483739)
+[2024-02-07 06:01:36 +0000] [3483737] [INFO] Shutting down: Master
+[2024-02-07 06:03:28 +0000] [3485042] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['0.0.0.0:8888']
+  backlog: 2048
+  workers: 2
+  worker_class: uvicorn.workers.UvicornWorker
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 60
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/ec2-user/NEFT-RTGS
+  daemon: True
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1000
+  group: 1000
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: /home/ec2-user/NEFT-RTGS/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s
+  errorlog: /home/ec2-user/NEFT-RTGS/error.log
+  loglevel: debug
+  capture_output: True
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: True
+  syslog_prefix: gunicorn
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: main:app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f6049e376a0>
+  on_reload: <function OnReload.on_reload at 0x7f6049e377e0>
+  when_ready: <function WhenReady.when_ready at 0x7f6049e37920>
+  pre_fork: <function Prefork.pre_fork at 0x7f6049e37b00>
+  post_fork: <function Postfork.post_fork at 0x7f6049e37c40>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f6049e37d80>
+  worker_int: <function WorkerInt.worker_int at 0x7f6049e37ec0>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f6049e58040>
+  pre_exec: <function PreExec.pre_exec at 0x7f6049e58180>
+  pre_request: <function PreRequest.pre_request at 0x7f6049e582c0>
+  post_request: <function PostRequest.post_request at 0x7f6049e58360>
+  child_exit: <function ChildExit.child_exit at 0x7f6049e584a0>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f6049e585e0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f6049e58720>
+  on_exit: <function OnExit.on_exit at 0x7f6049e58860>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f6049e58a40>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2024-02-07 06:03:28 +0000] [3485042] [INFO] Starting gunicorn 21.2.0
+[2024-02-07 06:03:28 +0000] [3485042] [DEBUG] Arbiter booted
+[2024-02-07 06:03:28 +0000] [3485042] [INFO] Listening at: http://0.0.0.0:8888 (3485042)
+[2024-02-07 06:03:28 +0000] [3485042] [INFO] Using worker: uvicorn.workers.UvicornWorker
+[2024-02-07 06:03:28 +0000] [3485059] [INFO] Booting worker with pid: 3485059
+[2024-02-07 06:03:28 +0000] [3485076] [INFO] Booting worker with pid: 3485076
+[2024-02-07 06:03:28 +0000] [3485042] [DEBUG] 2 workers
+[2024-02-07 06:03:29 +0000] [3485059] [INFO] Started server process [3485059]
+[2024-02-07 06:03:29 +0000] [3485059] [INFO] Waiting for application startup.
+[2024-02-07 06:03:29 +0000] [3485059] [INFO] Application startup complete.
+[2024-02-07 06:03:29 +0000] [3485076] [INFO] Started server process [3485076]
+[2024-02-07 06:03:29 +0000] [3485076] [INFO] Waiting for application startup.
+[2024-02-07 06:03:29 +0000] [3485076] [INFO] Application startup complete.
+Database connected successfully..
+Database connected successfully..
+[2024-02-08 11:56:40 +0000] [3485042] [INFO] Handling signal: term
+[2024-02-08 11:56:40 +0000] [3485059] [INFO] Shutting down
+[2024-02-08 11:56:40 +0000] [3485059] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-08 11:56:41 +0000] [3485076] [INFO] Shutting down
+[2024-02-08 11:56:41 +0000] [3485076] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-08 11:56:41 +0000] [3485059] [INFO] Waiting for application shutdown.
+[2024-02-08 11:56:41 +0000] [3485059] [INFO] Application shutdown complete.
+[2024-02-08 11:56:41 +0000] [3485059] [INFO] Finished server process [3485059]
+[2024-02-08 11:56:41 +0000] [3485059] [INFO] Worker exiting (pid: 3485059)
+[2024-02-08 11:56:41 +0000] [3485076] [INFO] Waiting for application shutdown.
+[2024-02-08 11:56:41 +0000] [3485076] [INFO] Application shutdown complete.
+[2024-02-08 11:56:41 +0000] [3485076] [INFO] Finished server process [3485076]
+[2024-02-08 11:56:41 +0000] [3485076] [INFO] Worker exiting (pid: 3485076)
+[2024-02-08 11:56:41 +0000] [3485042] [INFO] Shutting down: Master
+[2024-02-08 11:58:41 +0000] [3568739] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['0.0.0.0:8888']
+  backlog: 2048
+  workers: 2
+  worker_class: uvicorn.workers.UvicornWorker
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 60
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/ec2-user/NEFT-RTGS
+  daemon: True
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1000
+  group: 1000
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: /home/ec2-user/NEFT-RTGS/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s
+  errorlog: /home/ec2-user/NEFT-RTGS/error.log
+  loglevel: debug
+  capture_output: True
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: True
+  syslog_prefix: gunicorn
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: main:app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7fe85adfb6a0>
+  on_reload: <function OnReload.on_reload at 0x7fe85adfb7e0>
+  when_ready: <function WhenReady.when_ready at 0x7fe85adfb920>
+  pre_fork: <function Prefork.pre_fork at 0x7fe85adfbb00>
+  post_fork: <function Postfork.post_fork at 0x7fe85adfbc40>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7fe85adfbd80>
+  worker_int: <function WorkerInt.worker_int at 0x7fe85adfbec0>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7fe85ae20040>
+  pre_exec: <function PreExec.pre_exec at 0x7fe85ae20180>
+  pre_request: <function PreRequest.pre_request at 0x7fe85ae202c0>
+  post_request: <function PostRequest.post_request at 0x7fe85ae20360>
+  child_exit: <function ChildExit.child_exit at 0x7fe85ae204a0>
+  worker_exit: <function WorkerExit.worker_exit at 0x7fe85ae205e0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7fe85ae20720>
+  on_exit: <function OnExit.on_exit at 0x7fe85ae20860>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7fe85ae20a40>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2024-02-08 11:58:41 +0000] [3568739] [INFO] Starting gunicorn 21.2.0
+[2024-02-08 11:58:41 +0000] [3568739] [DEBUG] Arbiter booted
+[2024-02-08 11:58:41 +0000] [3568739] [INFO] Listening at: http://0.0.0.0:8888 (3568739)
+[2024-02-08 11:58:41 +0000] [3568739] [INFO] Using worker: uvicorn.workers.UvicornWorker
+[2024-02-08 11:58:41 +0000] [3568741] [INFO] Booting worker with pid: 3568741
+[2024-02-08 11:58:41 +0000] [3568742] [INFO] Booting worker with pid: 3568742
+[2024-02-08 11:58:42 +0000] [3568739] [DEBUG] 2 workers
+[2024-02-08 11:58:43 +0000] [3568741] [INFO] Started server process [3568741]
+[2024-02-08 11:58:43 +0000] [3568741] [INFO] Waiting for application startup.
+[2024-02-08 11:58:43 +0000] [3568741] [INFO] Application startup complete.
+[2024-02-08 11:58:43 +0000] [3568742] [INFO] Started server process [3568742]
+[2024-02-08 11:58:43 +0000] [3568742] [INFO] Waiting for application startup.
+[2024-02-08 11:58:43 +0000] [3568742] [INFO] Application startup complete.
+[2024-02-08 12:15:18 +0000] [3570193] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['0.0.0.0:8888']
+  backlog: 2048
+  workers: 2
+  worker_class: uvicorn.workers.UvicornWorker
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 60
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/ec2-user/NEFT-RTGS
+  daemon: True
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1000
+  group: 1000
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: /home/ec2-user/NEFT-RTGS/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s
+  errorlog: /home/ec2-user/NEFT-RTGS/error.log
+  loglevel: debug
+  capture_output: True
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: True
+  syslog_prefix: gunicorn
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: main:app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f7f2aa376a0>
+  on_reload: <function OnReload.on_reload at 0x7f7f2aa377e0>
+  when_ready: <function WhenReady.when_ready at 0x7f7f2aa37920>
+  pre_fork: <function Prefork.pre_fork at 0x7f7f2aa37b00>
+  post_fork: <function Postfork.post_fork at 0x7f7f2aa37c40>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f7f2aa37d80>
+  worker_int: <function WorkerInt.worker_int at 0x7f7f2aa37ec0>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f7f2aa5c040>
+  pre_exec: <function PreExec.pre_exec at 0x7f7f2aa5c180>
+  pre_request: <function PreRequest.pre_request at 0x7f7f2aa5c2c0>
+  post_request: <function PostRequest.post_request at 0x7f7f2aa5c360>
+  child_exit: <function ChildExit.child_exit at 0x7f7f2aa5c4a0>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f7f2aa5c5e0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f7f2aa5c720>
+  on_exit: <function OnExit.on_exit at 0x7f7f2aa5c860>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f7f2aa5ca40>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2024-02-08 12:15:18 +0000] [3570193] [INFO] Starting gunicorn 21.2.0
+[2024-02-08 12:15:18 +0000] [3570193] [ERROR] Connection in use: ('0.0.0.0', 8888)
+[2024-02-08 12:15:18 +0000] [3570193] [DEBUG] connection to ('0.0.0.0', 8888) failed: [Errno 98] Address already in use
+[2024-02-08 12:15:18 +0000] [3570193] [ERROR] Retrying in 1 second.
+[2024-02-08 12:15:19 +0000] [3570193] [ERROR] Connection in use: ('0.0.0.0', 8888)
+[2024-02-08 12:15:19 +0000] [3570193] [DEBUG] connection to ('0.0.0.0', 8888) failed: [Errno 98] Address already in use
+[2024-02-08 12:15:19 +0000] [3570193] [ERROR] Retrying in 1 second.
+[2024-02-08 12:15:20 +0000] [3570193] [ERROR] Connection in use: ('0.0.0.0', 8888)
+[2024-02-08 12:15:20 +0000] [3570193] [DEBUG] connection to ('0.0.0.0', 8888) failed: [Errno 98] Address already in use
+[2024-02-08 12:15:20 +0000] [3570193] [ERROR] Retrying in 1 second.
+[2024-02-08 12:15:21 +0000] [3570193] [ERROR] Connection in use: ('0.0.0.0', 8888)
+[2024-02-08 12:15:21 +0000] [3570193] [DEBUG] connection to ('0.0.0.0', 8888) failed: [Errno 98] Address already in use
+[2024-02-08 12:15:21 +0000] [3570193] [ERROR] Retrying in 1 second.
+[2024-02-08 12:15:22 +0000] [3570193] [ERROR] Connection in use: ('0.0.0.0', 8888)
+[2024-02-08 12:15:22 +0000] [3570193] [DEBUG] connection to ('0.0.0.0', 8888) failed: [Errno 98] Address already in use
+[2024-02-08 12:15:22 +0000] [3570193] [ERROR] Retrying in 1 second.
+[2024-02-08 12:15:23 +0000] [3570193] [ERROR] Can't connect to ('0.0.0.0', 8888)
+[2024-02-08 12:15:44 +0000] [3568739] [INFO] Handling signal: term
+[2024-02-08 12:15:44 +0000] [3568741] [INFO] Shutting down
+[2024-02-08 12:15:44 +0000] [3568741] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-08 12:15:44 +0000] [3568742] [INFO] Shutting down
+[2024-02-08 12:15:44 +0000] [3568742] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-08 12:15:44 +0000] [3568741] [INFO] Waiting for application shutdown.
+[2024-02-08 12:15:44 +0000] [3568741] [INFO] Application shutdown complete.
+[2024-02-08 12:15:44 +0000] [3568741] [INFO] Finished server process [3568741]
+[2024-02-08 12:15:44 +0000] [3568741] [INFO] Worker exiting (pid: 3568741)
+[2024-02-08 12:15:44 +0000] [3568742] [INFO] Waiting for application shutdown.
+[2024-02-08 12:15:44 +0000] [3568742] [INFO] Application shutdown complete.
+[2024-02-08 12:15:44 +0000] [3568742] [INFO] Finished server process [3568742]
+[2024-02-08 12:15:44 +0000] [3568742] [INFO] Worker exiting (pid: 3568742)
+[2024-02-08 12:15:45 +0000] [3568739] [INFO] Shutting down: Master
+[2024-02-08 12:15:57 +0000] [3570367] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['0.0.0.0:8888']
+  backlog: 2048
+  workers: 2
+  worker_class: uvicorn.workers.UvicornWorker
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 60
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/ec2-user/NEFT-RTGS
+  daemon: True
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1000
+  group: 1000
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: /home/ec2-user/NEFT-RTGS/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s
+  errorlog: /home/ec2-user/NEFT-RTGS/error.log
+  loglevel: debug
+  capture_output: True
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: True
+  syslog_prefix: gunicorn
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: main:app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f20fbebf6a0>
+  on_reload: <function OnReload.on_reload at 0x7f20fbebf7e0>
+  when_ready: <function WhenReady.when_ready at 0x7f20fbebf920>
+  pre_fork: <function Prefork.pre_fork at 0x7f20fbebfb00>
+  post_fork: <function Postfork.post_fork at 0x7f20fbebfc40>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f20fbebfd80>
+  worker_int: <function WorkerInt.worker_int at 0x7f20fbebfec0>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f20fbee0040>
+  pre_exec: <function PreExec.pre_exec at 0x7f20fbee0180>
+  pre_request: <function PreRequest.pre_request at 0x7f20fbee02c0>
+  post_request: <function PostRequest.post_request at 0x7f20fbee0360>
+  child_exit: <function ChildExit.child_exit at 0x7f20fbee04a0>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f20fbee05e0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f20fbee0720>
+  on_exit: <function OnExit.on_exit at 0x7f20fbee0860>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f20fbee0a40>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2024-02-08 12:15:57 +0000] [3570367] [INFO] Starting gunicorn 21.2.0
+[2024-02-08 12:15:57 +0000] [3570367] [DEBUG] Arbiter booted
+[2024-02-08 12:15:57 +0000] [3570367] [INFO] Listening at: http://0.0.0.0:8888 (3570367)
+[2024-02-08 12:15:57 +0000] [3570367] [INFO] Using worker: uvicorn.workers.UvicornWorker
+[2024-02-08 12:15:57 +0000] [3570369] [INFO] Booting worker with pid: 3570369
+[2024-02-08 12:15:57 +0000] [3570370] [INFO] Booting worker with pid: 3570370
+[2024-02-08 12:15:57 +0000] [3570367] [DEBUG] 2 workers
+[2024-02-08 12:15:59 +0000] [3570369] [INFO] Started server process [3570369]
+[2024-02-08 12:15:59 +0000] [3570369] [INFO] Waiting for application startup.
+[2024-02-08 12:15:59 +0000] [3570369] [INFO] Application startup complete.
+[2024-02-08 12:15:59 +0000] [3570370] [INFO] Started server process [3570370]
+[2024-02-08 12:15:59 +0000] [3570370] [INFO] Waiting for application startup.
+[2024-02-08 12:15:59 +0000] [3570370] [INFO] Application startup complete.
+[2024-02-08 12:16:36 +0000] [3570367] [INFO] Handling signal: term
+[2024-02-08 12:16:36 +0000] [3570369] [INFO] Shutting down
+[2024-02-08 12:16:36 +0000] [3570369] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-08 12:16:36 +0000] [3570370] [INFO] Shutting down
+[2024-02-08 12:16:36 +0000] [3570370] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-08 12:16:36 +0000] [3570369] [INFO] Waiting for application shutdown.
+[2024-02-08 12:16:36 +0000] [3570369] [INFO] Application shutdown complete.
+[2024-02-08 12:16:36 +0000] [3570369] [INFO] Finished server process [3570369]
+[2024-02-08 12:16:36 +0000] [3570369] [INFO] Worker exiting (pid: 3570369)
+[2024-02-08 12:16:36 +0000] [3570370] [INFO] Waiting for application shutdown.
+[2024-02-08 12:16:36 +0000] [3570370] [INFO] Application shutdown complete.
+[2024-02-08 12:16:36 +0000] [3570370] [INFO] Finished server process [3570370]
+[2024-02-08 12:16:36 +0000] [3570370] [INFO] Worker exiting (pid: 3570370)
+[2024-02-08 12:16:36 +0000] [3570367] [INFO] Shutting down: Master
+[2024-02-08 12:16:43 +0000] [3570585] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['0.0.0.0:8888']
+  backlog: 2048
+  workers: 2
+  worker_class: uvicorn.workers.UvicornWorker
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 60
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/ec2-user/NEFT-RTGS
+  daemon: True
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1000
+  group: 1000
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: /home/ec2-user/NEFT-RTGS/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s
+  errorlog: /home/ec2-user/NEFT-RTGS/error.log
+  loglevel: debug
+  capture_output: True
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: True
+  syslog_prefix: gunicorn
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: main:app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f793dabf6a0>
+  on_reload: <function OnReload.on_reload at 0x7f793dabf7e0>
+  when_ready: <function WhenReady.when_ready at 0x7f793dabf920>
+  pre_fork: <function Prefork.pre_fork at 0x7f793dabfb00>
+  post_fork: <function Postfork.post_fork at 0x7f793dabfc40>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f793dabfd80>
+  worker_int: <function WorkerInt.worker_int at 0x7f793dabfec0>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f793dae0040>
+  pre_exec: <function PreExec.pre_exec at 0x7f793dae0180>
+  pre_request: <function PreRequest.pre_request at 0x7f793dae02c0>
+  post_request: <function PostRequest.post_request at 0x7f793dae0360>
+  child_exit: <function ChildExit.child_exit at 0x7f793dae04a0>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f793dae05e0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f793dae0720>
+  on_exit: <function OnExit.on_exit at 0x7f793dae0860>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f793dae0a40>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2024-02-08 12:16:43 +0000] [3570585] [INFO] Starting gunicorn 21.2.0
+[2024-02-08 12:16:43 +0000] [3570585] [DEBUG] Arbiter booted
+[2024-02-08 12:16:43 +0000] [3570585] [INFO] Listening at: http://0.0.0.0:8888 (3570585)
+[2024-02-08 12:16:43 +0000] [3570585] [INFO] Using worker: uvicorn.workers.UvicornWorker
+[2024-02-08 12:16:43 +0000] [3570587] [INFO] Booting worker with pid: 3570587
+[2024-02-08 12:16:43 +0000] [3570588] [INFO] Booting worker with pid: 3570588
+[2024-02-08 12:16:43 +0000] [3570585] [DEBUG] 2 workers
+[2024-02-08 12:16:45 +0000] [3570587] [INFO] Started server process [3570587]
+[2024-02-08 12:16:45 +0000] [3570587] [INFO] Waiting for application startup.
+[2024-02-08 12:16:45 +0000] [3570587] [INFO] Application startup complete.
+[2024-02-08 12:16:45 +0000] [3570588] [INFO] Started server process [3570588]
+[2024-02-08 12:16:45 +0000] [3570588] [INFO] Waiting for application startup.
+[2024-02-08 12:16:45 +0000] [3570588] [INFO] Application startup complete.
+[2024-02-08 12:25:13 +0000] [3570585] [INFO] Handling signal: term
+[2024-02-08 12:25:13 +0000] [3570588] [INFO] Shutting down
+[2024-02-08 12:25:13 +0000] [3570588] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-08 12:25:13 +0000] [3570587] [INFO] Shutting down
+[2024-02-08 12:25:13 +0000] [3570587] [INFO] Error while closing socket [Errno 9] Bad file descriptor
+[2024-02-08 12:25:14 +0000] [3570588] [INFO] Waiting for application shutdown.
+[2024-02-08 12:25:14 +0000] [3570588] [INFO] Application shutdown complete.
+[2024-02-08 12:25:14 +0000] [3570588] [INFO] Finished server process [3570588]
+[2024-02-08 12:25:14 +0000] [3570588] [INFO] Worker exiting (pid: 3570588)
+[2024-02-08 12:25:14 +0000] [3570587] [INFO] Waiting for application shutdown.
+[2024-02-08 12:25:14 +0000] [3570587] [INFO] Application shutdown complete.
+[2024-02-08 12:25:14 +0000] [3570587] [INFO] Finished server process [3570587]
+[2024-02-08 12:25:14 +0000] [3570587] [INFO] Worker exiting (pid: 3570587)
+[2024-02-08 12:25:14 +0000] [3570585] [INFO] Shutting down: Master
+[2024-02-08 12:25:21 +0000] [3571607] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['0.0.0.0:8888']
+  backlog: 2048
+  workers: 2
+  worker_class: uvicorn.workers.UvicornWorker
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 60
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/ec2-user/NEFT-RTGS
+  daemon: True
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1000
+  group: 1000
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: /home/ec2-user/NEFT-RTGS/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s
+  errorlog: /home/ec2-user/NEFT-RTGS/error.log
+  loglevel: debug
+  capture_output: True
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: True
+  syslog_prefix: gunicorn
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: main:app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f19adabf6a0>
+  on_reload: <function OnReload.on_reload at 0x7f19adabf7e0>
+  when_ready: <function WhenReady.when_ready at 0x7f19adabf920>
+  pre_fork: <function Prefork.pre_fork at 0x7f19adabfb00>
+  post_fork: <function Postfork.post_fork at 0x7f19adabfc40>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f19adabfd80>
+  worker_int: <function WorkerInt.worker_int at 0x7f19adabfec0>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f19adae0040>
+  pre_exec: <function PreExec.pre_exec at 0x7f19adae0180>
+  pre_request: <function PreRequest.pre_request at 0x7f19adae02c0>
+  post_request: <function PostRequest.post_request at 0x7f19adae0360>
+  child_exit: <function ChildExit.child_exit at 0x7f19adae04a0>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f19adae05e0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f19adae0720>
+  on_exit: <function OnExit.on_exit at 0x7f19adae0860>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f19adae0a40>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2024-02-08 12:25:21 +0000] [3571607] [INFO] Starting gunicorn 21.2.0
+[2024-02-08 12:25:21 +0000] [3571607] [DEBUG] Arbiter booted
+[2024-02-08 12:25:21 +0000] [3571607] [INFO] Listening at: http://0.0.0.0:8888 (3571607)
+[2024-02-08 12:25:21 +0000] [3571607] [INFO] Using worker: uvicorn.workers.UvicornWorker
+[2024-02-08 12:25:21 +0000] [3571609] [INFO] Booting worker with pid: 3571609
+[2024-02-08 12:25:21 +0000] [3571610] [INFO] Booting worker with pid: 3571610
+[2024-02-08 12:25:21 +0000] [3571607] [DEBUG] 2 workers
+[2024-02-08 12:25:22 +0000] [3571609] [INFO] Started server process [3571609]
+[2024-02-08 12:25:22 +0000] [3571609] [INFO] Waiting for application startup.
+[2024-02-08 12:25:22 +0000] [3571609] [INFO] Application startup complete.
+[2024-02-08 12:25:22 +0000] [3571610] [INFO] Started server process [3571610]
+[2024-02-08 12:25:22 +0000] [3571610] [INFO] Waiting for application startup.
+[2024-02-08 12:25:22 +0000] [3571610] [INFO] Application startup complete.

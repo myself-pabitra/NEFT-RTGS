@@ -1,0 +1,14 @@
+[Unit]
+Description=Gunicorn instance to serve Payout_Application
+After=network.target
+
+[Service]
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/home/ec2-user/NEFT-RTGS
+Environment="PATH=/home/ec2-user/NEFT-RTGS/env"
+ExecStart=/home/ec2-user/NEFT-RTGS/env/bin/gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8888 main:app
+
+
+[Install]
+WantedBy=multi-user.target
