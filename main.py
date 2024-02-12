@@ -3,7 +3,7 @@ import socket
 from routers.netbanking_txn import router as netbankingRouter
 from routers.auth import router as authRouter
 
-app = FastAPI()
+app = FastAPI(redoc_url=None, docs_url=None)
 # app = FastAPI(docs_url=None, redoc_url=None)
 
 app.include_router(netbankingRouter)

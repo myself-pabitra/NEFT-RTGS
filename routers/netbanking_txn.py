@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status, HTTPException, Depends
 from typing import List, Union
 from models.imps_transaction import (
     TransactionRequest,
@@ -6,6 +6,7 @@ from models.imps_transaction import (
     StatusRequest,
     StatusResponse,
     StatusErrorResponse,
+    Balancerequest,
 )
 from datetime import datetime, timedelta, timezone
 from database.connections import connect
@@ -13,6 +14,12 @@ from mysql.connector import Error
 import random
 import string
 import requests
+from decimal import Decimal
+
+
+# Authentication Imports
+from routers.auth import get_current_merchant, get_merchant_by_id
+
 
 router = APIRouter(prefix="/api", tags=["NetBanking"])
 
@@ -72,7 +79,32 @@ ip, latitude, longitude = extract_ip_lat_lon()
 
 
 @router.post("/payout", response_model=TransactionResponse)
-async def netBanking_transaction_request_(impsRequestData: TransactionRequest):
+async def netBanking_transaction_request_(
+    impsRequestData: TransactionRequest,
+):
+    """Intitate Payment Request"""
+    scheme, token, user_data = (
+        impsRequestData.token_type,
+        impsRequestData.access_token,
+        impsRequestData.user_data,
+    )
+    if scheme.lower() != "bearer":
+
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    merchant_id = get_current_merchant(token=token)
+    merchant = get_merchant_by_id(id=merchant_id)
+
+    if not merchant:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Invalid Credentials"
+        )
+
+    mcode = merchant.get("mCode")
     """
     Extra_request_data_from backend to request model..
     """
@@ -87,54 +119,47 @@ async def netBanking_transaction_request_(impsRequestData: TransactionRequest):
         conn = connect()
 
         if conn.is_connected():
-            print("Database connected successfully..")
             cursor = conn.cursor()
             try:
                 """
                 Balance check and debiting wallet balnce section of current transaction
                 """
-                requested_balnce = impsRequestData.amount
-                mcode = "VIPL"  # get the merchnat code from the jwt token
-                merchant_id = "1"  # get the merchnat id from the jwt token
-                merchnat_wallet_balance = fetch_wallet_bal(mcode)
+                requested_balnce = Decimal(impsRequestData.user_data.amount)
+                merchnat_wallet_balance = fetch_wallet_bal(merchant_id)
+                if not merchnat_wallet_balance:
+                    raise HTTPException(
+                        status_code=404, detail="Could't fetch wallet balance."
+                    )
 
-                if requested_balnce > merchnat_wallet_balance:
+                if requested_balnce > int(merchnat_wallet_balance):
                     raise HTTPException(
                         status_code=400,
                         detail="You don't have sufficient wallet balance to perform this transaction",
                     )
-                else:
-                    updated_balance = merchnat_wallet_balance - requested_balnce
 
-                    conn.start_transaction()
-                    update_balace_query = (
-                        "UPDATE merchants_wallet SET balance = %s WHERE mcode = %s"
-                    )
-                    cursor.execute(update_balace_query, (updated_balance, mcode))
+                insert_transaction_request_data_query = "INSERT INTO netbanking_requests (beneName,beneAccountNo,beneifsc,benePhoneNo,beneBankName,clientReferenceNo,amount,fundTransferType,pincode,custName,custMobNo,custIpAddress,merchant_id,mcode,latlong,paramA,paramB) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 
-                    insert_transaction_request_data_query = "INSERT INTO netbanking_requests (beneName,beneAccountNo,beneifsc,benePhoneNo,beneBankName,clientReferenceNo,amount,fundTransferType,pincode,custName,custMobNo,custIpAddress,merchant_id,mcode,latlong,paramA,paramB) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-
-                    request_data = (
-                        impsRequestData.beneName,
-                        impsRequestData.beneAccountNo,
-                        impsRequestData.beneifsc,
-                        impsRequestData.benePhoneNo,
-                        impsRequestData.beneBankName,
-                        clientReferenceNo,
-                        impsRequestData.amount,
-                        impsRequestData.fundTransferType,
-                        impsRequestData.pincode,
-                        impsRequestData.custName,
-                        impsRequestData.custMobNo,
-                        custIpAddress,
-                        merchant_id,
-                        mcode,
-                        latlong,
-                        impsRequestData.paramA,
-                        impsRequestData.paramB,
-                    )
-                    cursor.execute(insert_transaction_request_data_query, request_data)
-                    conn.commit()
+                request_data = (
+                    impsRequestData.user_data.beneName,
+                    impsRequestData.user_data.beneAccountNo,
+                    impsRequestData.user_data.beneifsc,
+                    impsRequestData.user_data.benePhoneNo,
+                    impsRequestData.user_data.beneBankName,
+                    clientReferenceNo,
+                    requested_balnce,
+                    impsRequestData.user_data.fundTransferType,
+                    impsRequestData.user_data.pincode,
+                    impsRequestData.user_data.custName,
+                    impsRequestData.user_data.custMobNo,
+                    custIpAddress,
+                    merchant_id,
+                    mcode,
+                    latlong,
+                    impsRequestData.user_data.paramA,
+                    impsRequestData.user_data.paramB,
+                )
+                cursor.execute(insert_transaction_request_data_query, request_data)
+                conn.commit()
 
             except Error as e:
                 conn.rollback()
@@ -179,6 +204,7 @@ async def netBanking_transaction_request_(impsRequestData: TransactionRequest):
     status, subStatus, statusDesc = generate_random_status()
 
     status = status  # For UAT its Static status for transaction Response
+    print("status:", status)
     subStatus = subStatus  # For UAT its static subStatus
     statusDesc = statusDesc  # For UAT its static subStatusDescription
     rrn = generate_transactionId(
@@ -188,7 +214,8 @@ async def netBanking_transaction_request_(impsRequestData: TransactionRequest):
         generate_transactionId()
     )  # This will iServeU system generated unique transaction id
     tnx_dateTime = str(datetime.now(timezone.utc).strftime("%m-%d-%Y %H:%M:%S"))
-
+    wallet_transaction_reference = generate_transactionId(15)
+    wallet_transaction_type = "Dr"
     """
     All the Response data from iServeU will be inserted into Paythrough database here below....
     """
@@ -196,10 +223,42 @@ async def netBanking_transaction_request_(impsRequestData: TransactionRequest):
         conn = connect()
 
         if conn.is_connected():
-            print("Database connected successfully..")
+
             cursor = conn.cursor()
             try:
                 conn.start_transaction()
+                """
+                    here I have to do a transaction in wallet and update the database according to the response of iServeU
+                    TODO
+                """
+                # Deduct wallet balance only if status is 'SUCCESS' or 'INPROGRESS'
+                if status in ["SUCCESS", "INPROGRESS"]:
+                    updated_balance = merchnat_wallet_balance - requested_balnce
+
+                    """ Update Wallet Balance if transaction after deduction is transaction is successful """
+                    update_balance_query = "UPDATE merchants_wallet SET balance = %s WHERE merchant_id = %s"
+                    cursor.execute(update_balance_query, (updated_balance, merchant_id))
+
+                    """ Do The wallet Transaction """
+                    wallet_transaction_query = "INSERT INTO merchant_wallet_transactions (clientReferenceNo,merchant_id,mcode,wallet_transaction_reference,transaction_amount,transaction_type,current_balance) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+
+                    wallet_transaction_data = (
+                        clientReferenceNo,
+                        merchant_id,
+                        mcode,
+                        wallet_transaction_reference,
+                        requested_balnce,
+                        wallet_transaction_type,
+                        updated_balance,
+                    )
+
+                    cursor.execute(wallet_transaction_query, wallet_transaction_data)
+                else:
+
+                    updated_balance = (
+                        merchnat_wallet_balance  # No deduction if transaction fails
+                    )
+
                 insert_transaction_response_data_query = "INSERT INTO netbanking_response (status,subStatus,statusDesc,rrn,transactionId,beneName,beneAccountNo,beneifsc,benePhoneNo,beneBankName,clientReferenceNo,txnAmount,txnType,latlong,pincode,custName,custMobNo,dateTime,paramA,paramB) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 
                 """
@@ -213,21 +272,21 @@ async def netBanking_transaction_request_(impsRequestData: TransactionRequest):
                     statusDesc,
                     rrn,
                     transactionId,
-                    impsRequestData.beneName,
-                    impsRequestData.beneAccountNo,
-                    impsRequestData.beneifsc,
-                    impsRequestData.benePhoneNo,
-                    impsRequestData.beneBankName,
+                    impsRequestData.user_data.beneName,
+                    impsRequestData.user_data.beneAccountNo,
+                    impsRequestData.user_data.beneifsc,
+                    impsRequestData.user_data.benePhoneNo,
+                    impsRequestData.user_data.beneBankName,
                     clientReferenceNo,
-                    impsRequestData.amount,
-                    impsRequestData.fundTransferType,
+                    requested_balnce,
+                    impsRequestData.user_data.fundTransferType,
                     latlong,
-                    impsRequestData.pincode,
-                    impsRequestData.custName,
-                    impsRequestData.custMobNo,
+                    impsRequestData.user_data.pincode,
+                    impsRequestData.user_data.custName,
+                    impsRequestData.user_data.custMobNo,
                     tnx_dateTime,
-                    impsRequestData.paramA,
-                    impsRequestData.paramB,
+                    impsRequestData.user_data.paramA,
+                    impsRequestData.user_data.paramB,
                 )
                 cursor.execute(
                     insert_transaction_response_data_query, api_response_data
@@ -258,21 +317,21 @@ async def netBanking_transaction_request_(impsRequestData: TransactionRequest):
         "statusDesc": statusDesc,
         "rrn": rrn,
         "transactionId": transactionId,
-        "beneName": impsRequestData.beneName,
-        "beneAccountNo": impsRequestData.beneAccountNo,
-        "beneifsc": impsRequestData.beneifsc,
-        "benePhoneNo": impsRequestData.benePhoneNo,
-        "beneBankName": impsRequestData.beneBankName,
+        "beneName": impsRequestData.user_data.beneName,
+        "beneAccountNo": impsRequestData.user_data.beneAccountNo,
+        "beneifsc": impsRequestData.user_data.beneifsc,
+        "benePhoneNo": impsRequestData.user_data.benePhoneNo,
+        "beneBankName": impsRequestData.user_data.beneBankName,
         "clientReferenceNo": clientReferenceNo,
-        "txnAmount": impsRequestData.amount,
-        "txnType": impsRequestData.fundTransferType,
+        "txnAmount": requested_balnce,
+        "txnType": impsRequestData.user_data.fundTransferType,
         "latlong": latlong,
-        "pincode": impsRequestData.pincode,
-        "custName": impsRequestData.custName,
-        "custMobNo": impsRequestData.custMobNo,
+        "pincode": impsRequestData.user_data.pincode,
+        "custName": impsRequestData.user_data.custName,
+        "custMobNo": impsRequestData.user_data.custMobNo,
         "dateTime": tnx_dateTime,
-        "paramA": impsRequestData.paramA,
-        "paramB": impsRequestData.paramB,
+        "paramA": impsRequestData.user_data.paramA,
+        "paramB": impsRequestData.user_data.paramB,
     }
 
     return response_data
@@ -280,12 +339,36 @@ async def netBanking_transaction_request_(impsRequestData: TransactionRequest):
 
 @router.post("/status", response_model=Union[StatusResponse, StatusErrorResponse])
 async def check_transaction_status(statusRequest: StatusRequest):
+    """Intitate Payment Request"""
+    scheme, token, user_status_data = (
+        statusRequest.token_type,
+        statusRequest.access_token,
+        statusRequest.user_status_data,
+    )
 
-    Query_Operation = statusRequest.Query_Operation
-    Start_Date = statusRequest.Start_Date
-    End_Date = statusRequest.End_Date
-    ClientRefId = statusRequest.ClientRefId
-    Transaction_ID = statusRequest.Transaction_ID
+    if scheme.lower() != "bearer":
+
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    merchant_id = get_current_merchant(token=token)
+    merchant = get_merchant_by_id(id=merchant_id)
+
+    if not merchant:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Invalid Credentials"
+        )
+
+    mcode = merchant.get("mCode")
+
+    Query_Operation = statusRequest.user_status_data.Query_Operation
+    Start_Date = statusRequest.user_status_data.Start_Date
+    End_Date = statusRequest.user_status_data.End_Date
+    ClientRefId = statusRequest.user_status_data.ClientRefId
+    Transaction_ID = statusRequest.user_status_data.Transaction_ID
 
     try:
         conn = connect()
@@ -300,21 +383,18 @@ async def check_transaction_status(statusRequest: StatusRequest):
                     "WHERE clientReferenceNo = %s "
                     "AND transactionId = %s"
                 )
-                print(query)
                 """
                 here we will insert iServeU api response data... In Production
 
                 TODO
                 """
-                values = (
-                    statusRequest.ClientRefId,
-                    statusRequest.Transaction_ID,
-                )
+                values = (ClientRefId, Transaction_ID)
                 cursor.execute(query, values)
 
                 columns = [desc[0] for desc in cursor.description]
 
                 transaction_details = cursor.fetchone()
+                print(transaction_details)
 
                 if not transaction_details:
                     response_data = {
@@ -358,7 +438,7 @@ async def check_transaction_status(statusRequest: StatusRequest):
                                 "paramA": transaction_details_data["paramA"],
                                 "paramB": transaction_details_data["paramB"],
                                 "dateTime": transaction_details_data["dateTime"],
-                                "txnAmount": int(transaction_details_data["txnAmount"]),
+                                "txnAmount": str(transaction_details_data["txnAmount"]),
                                 "txnType": transaction_details_data["txnType"],
                             }
                         ],
@@ -382,8 +462,6 @@ async def check_transaction_status(statusRequest: StatusRequest):
         if conn.is_connected():
             conn.close()
 
-    print("Final : ", response_data)
-
     return response_data
 
 
@@ -392,7 +470,7 @@ Function to fetch Merchnats Wallet Balance
 """
 
 
-def fetch_wallet_bal(mcode: str) -> Union[float, None]:
+def fetch_wallet_bal(merchant_id: int) -> Union[float, None]:
     try:
         conn = connect()
 
@@ -400,11 +478,11 @@ def fetch_wallet_bal(mcode: str) -> Union[float, None]:
             cursor = conn.cursor()
             try:
                 conn.start_transaction()
-                query = "SELECT balance FROM merchants_wallet WHERE mcode = %s"
-                cursor.execute(query, (mcode,))
+                query = "SELECT balance FROM merchants_wallet WHERE merchant_id = %s"
+                cursor.execute(query, (merchant_id,))
                 balance = cursor.fetchone()
                 if balance is not None:
-                    return balance[0]  # Return the balance if found
+                    return Decimal(balance[0])  # Return the balance if found
                 else:
                     # Return None if merchant not found
                     return None
@@ -429,15 +507,37 @@ def fetch_wallet_bal(mcode: str) -> Union[float, None]:
 
 
 """
-This endpoint will get the merchant's wallet balance
+This endpoint will fetch the merchant's avaliabel wallet balance
 """
 
 
-@router.get("/get-balance/{mcode}")
-async def get_wallet_balance(mcode: str) -> Union[float, None]:
+@router.post("/get-balance/")
+async def get_wallet_balance(request: Balancerequest):
     try:
-        cleared_balance = fetch_wallet_bal(mcode)
-        return cleared_balance
+        """Intitate Payment Request"""
+        scheme, token = request.token_type, request.access_token
+
+        if scheme.lower() != "bearer":
+
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Not authenticated",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        merchant_id = get_current_merchant(token=token)
+        merchant = get_merchant_by_id(id=merchant_id)
+
+        if not merchant:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Invalid Credentials"
+            )
+
+        merchnat_wallet_balance = fetch_wallet_bal(merchant_id)
+        if not merchnat_wallet_balance:
+            raise HTTPException(status_code=404, detail="Could't fetch wallet balance.")
+
+        return {"Available wallet balance": str(merchnat_wallet_balance)}
     except Exception as err:
         # Handle database errors
         message = f"Error: {err}"
