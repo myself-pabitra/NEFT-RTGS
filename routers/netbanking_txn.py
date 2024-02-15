@@ -15,6 +15,12 @@ import random
 import string
 import requests
 from decimal import Decimal
+from database.settings import (
+    CASH_TRANSFER_API_ENDPOINT,
+    TRANSACTION_REPORT_ENDPOINT,
+    CLIENT_ID,
+    CLIENT_SECRET,
+)
 
 
 # Authentication Imports
@@ -124,14 +130,15 @@ async def netBanking_transaction_request_(
                 """
                 Balance check and debiting wallet balnce section of current transaction
                 """
-                requested_balnce = Decimal(impsRequestData.user_data.amount)
+                requested_balnce = impsRequestData.user_data.amount  # in Decimal
+                print(type(impsRequestData.user_data.amount))
                 merchnat_wallet_balance = fetch_wallet_bal(merchant_id)
                 if not merchnat_wallet_balance:
                     raise HTTPException(
                         status_code=404, detail="Could't fetch wallet balance."
                     )
 
-                if requested_balnce > int(merchnat_wallet_balance):
+                if requested_balnce > merchnat_wallet_balance:
                     raise HTTPException(
                         status_code=400,
                         detail="You don't have sufficient wallet balance to perform this transaction",
@@ -184,6 +191,40 @@ async def netBanking_transaction_request_(
 
     TODO
     """
+
+    payout_api_url = CASH_TRANSFER_API_ENDPOINT
+    client_id = CLIENT_ID
+    client_secret = CLIENT_SECRET
+
+    headers = {
+        "Content-Type": "application/json",
+        "client_id": client_id,
+        "client_secret": client_secret,
+    }
+
+    payload = {
+        "beneName": impsRequestData.user_data.beneName,
+        "beneAccountNo": impsRequestData.user_data.beneAccountNo,
+        "beneifsc": impsRequestData.user_data.beneifsc,
+        "benePhoneNo": int(impsRequestData.user_data.benePhoneNo),
+        "beneBankName": impsRequestData.user_data.beneBankName,
+        "clientReferenceNo": clientReferenceNo,
+        "amount": float(requested_balnce),
+        "fundTransferType": impsRequestData.user_data.fundTransferType,
+        "latlong": latlong,
+        "pincode": int(impsRequestData.user_data.pincode),
+        "custName": impsRequestData.user_data.custName,
+        "custMobNo": int(impsRequestData.user_data.custMobNo),
+        "custIpAddress": custIpAddress,
+        "paramA": impsRequestData.user_data.paramA,
+        "paramB": impsRequestData.user_data.paramB,
+    }
+
+    print("data from payload :", payload)
+    print("data from payload :", payload["amount"])
+
+    response = requests.post(payout_api_url, json=payload, headers=headers)
+    print(response.text)
 
     """
     Extra_response_data_from backend to response model.. for UAT in productio there should be api response data from iserveU
@@ -482,7 +523,7 @@ def fetch_wallet_bal(merchant_id: int) -> Union[float, None]:
                 cursor.execute(query, (merchant_id,))
                 balance = cursor.fetchone()
                 if balance is not None:
-                    return Decimal(balance[0])  # Return the balance if found
+                    return Decimal(balance[0])  # Return the balance if found in Decimal
                 else:
                     # Return None if merchant not found
                     return None
@@ -490,6 +531,7 @@ def fetch_wallet_bal(merchant_id: int) -> Union[float, None]:
             except Error as e:
                 conn.rollback()
                 message = f"Error: {e}"
+                print(message)
                 raise HTTPException(status_code=500, detail=message)
             finally:
                 cursor.close()

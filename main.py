@@ -11,5 +11,8 @@ app.include_router(authRouter)
 
 
 @app.get("/")
-async def root():
+async def root(request: Request):
+    ip = request.client.host
+    print(ip)
+
     return {"message": "From Payments application"}
