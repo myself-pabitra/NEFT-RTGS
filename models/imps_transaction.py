@@ -104,7 +104,7 @@ class TransactionResponse(BaseModel):
     benePhoneNo: str
     beneBankName: str
     clientReferenceNo: str
-    txnAmount: Decimal
+    txnAmount: float
     txnType: str
     latlong: str
     pincode: str

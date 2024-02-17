@@ -1,4 +1,5 @@
 from fastapi import APIRouter, status, HTTPException, Depends
+from pydantic import ValidationError
 from typing import List, Union
 from models.imps_transaction import (
     TransactionRequest,
@@ -131,7 +132,6 @@ async def netBanking_transaction_request_(
                 Balance check and debiting wallet balnce section of current transaction
                 """
                 requested_balnce = impsRequestData.user_data.amount  # in Decimal
-                print(type(impsRequestData.user_data.amount))
                 merchnat_wallet_balance = fetch_wallet_bal(merchant_id)
                 if not merchnat_wallet_balance:
                     raise HTTPException(
@@ -220,43 +220,108 @@ async def netBanking_transaction_request_(
         "paramB": impsRequestData.user_data.paramB,
     }
 
-    print("data from payload :", payload)
-    print("data from payload :", payload["amount"])
+    try:
+        """Make the API request to ISERVEU"""
+        response = requests.post(payout_api_url, json=payload, headers=headers)
+        response.raise_for_status()  # Raise an exception for HTTP errors
 
-    response = requests.post(payout_api_url, json=payload, headers=headers)
-    print(response.text)
+        # De-structure the API response
+        iServeU_response_data = response.json()
+
+        print(iServeU_response_data)
+
+        ISERVEU_transaction_id = iServeU_response_data["transactionId"]
+        ISERVEU_sub_status = iServeU_response_data["subStatus"]
+        ISERVEU_status = iServeU_response_data["status"]
+        ISERVEU_status_desc = iServeU_response_data["statusDesc"]
+        ISERVEU_bene_name = iServeU_response_data["beneName"]
+        ISERVEU_bene_account_no = iServeU_response_data["beneAccountNo"]
+        ISERVEU_bene_ifsc = iServeU_response_data["beneifsc"]
+        ISERVEU_bene_phone_no = iServeU_response_data["benePhoneNo"]
+        ISERVEU_bene_bank_name = iServeU_response_data["beneBankName"]
+        ISERVEU_client_reference_no = iServeU_response_data["clientReferenceNo"]
+        ISERVEU_latlong = iServeU_response_data["latlong"]
+        ISERVEU_pincode = iServeU_response_data["pincode"]
+        ISERVEU_cust_name = iServeU_response_data["custName"]
+        ISERVEU_cust_mob_no = iServeU_response_data["custMobNo"]
+        ISERVEU_rrn = iServeU_response_data["rrn"]
+        ISERVEU_param_a = iServeU_response_data["paramA"]
+        ISERVEU_param_b = iServeU_response_data["paramB"]
+        ISERVEU_date_time = iServeU_response_data["dateTime"]
+        ISERVEU_txn_amount = iServeU_response_data["txnAmount"]
+        ISERVEU_txn_type = iServeU_response_data["txnType"]
+
+    except requests.RequestException as e:
+        # Handle API request errors
+        error_message = f"Error making API request: {str(e)}"
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=error_message
+        )
+
+    # except ValueError as e:
+    #     # Handle JSON decoding error
+    #     error_message = "Error decoding JSON response from API"
+    #     raise HTTPException(
+    #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=error_message
+    #     )
+
+    # except KeyError as e:
+    #     # Handle missing keys in API response
+    #     error_message = "KeyError: Required keys missing in API response"
+    #     raise HTTPException(
+    #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=error_message
+    #     )
+
+    except ValidationError as e:
+        # Handle Pydantic validation errors
+        error_message = f"Pydantic validation error: {str(e)}"
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=error_message
+        )
+
+    except Exception as e:
+        # Handle other unexpected errors
+        error_message = f"Unexpected error: {str(e)}"
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=error_message
+        )
 
     """
     Extra_response_data_from backend to response model.. for UAT in productio there should be api response data from iserveU
     """
+    """
+    Disabled for integrating iserveU response
+    """
 
-    def generate_random_status():
+    # def generate_random_status():
 
-        statuses = [
-            ("FAILED", "-1", "Failed from Bank"),
-            ("FAILED", "2", "Failed from wallet"),
-            ("FAILED", "-2", "Failed from IServeU"),
-            ("INPROGRESS", "1", "Transaction In Progress"),
-            ("SUCCESS", "0", "Transaction success"),
-        ]
-        return random.choice(statuses)
+    #     statuses = [
+    #         ("FAILED", "-1", "Failed from Bank"),
+    #         ("FAILED", "2", "Failed from wallet"),
+    #         ("FAILED", "-2", "Failed from IServeU"),
+    #         ("INPROGRESS", "1", "Transaction In Progress"),
+    #         ("SUCCESS", "0", "Transaction success"),
+    #     ]
+    #     return random.choice(statuses)
 
-    # Set variables to randomly generated values
-    status, subStatus, statusDesc = generate_random_status()
+    # # Set variables to randomly generated values
+    # status, subStatus, statusDesc = generate_random_status()
 
-    status = status  # For UAT its Static status for transaction Response
-    print("status:", status)
-    subStatus = subStatus  # For UAT its static subStatus
-    statusDesc = statusDesc  # For UAT its static subStatusDescription
-    rrn = generate_transactionId(
-        10
-    )  # This unique number will generated by the bank/NPCI for each transaction
-    transactionId = (
-        generate_transactionId()
-    )  # This will iServeU system generated unique transaction id
-    tnx_dateTime = str(datetime.now(timezone.utc).strftime("%m-%d-%Y %H:%M:%S"))
+    # status = status  # For UAT its Static status for transaction Response
+
+    # subStatus = subStatus  # For UAT its static subStatus
+    # statusDesc = statusDesc  # For UAT its static subStatusDescription
+    # rrn = generate_transactionId(
+    #     10
+    # )  # This unique number will generated by the bank/NPCI for each transaction
+    # transactionId = (
+    #     generate_transactionId()
+    # )  # This will iServeU system generated unique transaction id
+    # tnx_dateTime = str(datetime.now(timezone.utc).strftime("%m-%d-%Y %H:%M:%S"))
+
     wallet_transaction_reference = generate_transactionId(15)
     wallet_transaction_type = "Dr"
+
     """
     All the Response data from iServeU will be inserted into Paythrough database here below....
     """
@@ -273,7 +338,7 @@ async def netBanking_transaction_request_(
                     TODO
                 """
                 # Deduct wallet balance only if status is 'SUCCESS' or 'INPROGRESS'
-                if status in ["SUCCESS", "INPROGRESS"]:
+                if ISERVEU_status in ["SUCCESS", "INPROGRESS"]:
                     updated_balance = merchnat_wallet_balance - requested_balnce
 
                     """ Update Wallet Balance if transaction after deduction is transaction is successful """
@@ -284,11 +349,11 @@ async def netBanking_transaction_request_(
                     wallet_transaction_query = "INSERT INTO merchant_wallet_transactions (clientReferenceNo,merchant_id,mcode,wallet_transaction_reference,transaction_amount,transaction_type,current_balance) VALUES (%s,%s,%s,%s,%s,%s,%s)"
 
                     wallet_transaction_data = (
-                        clientReferenceNo,
+                        ISERVEU_client_reference_no,
                         merchant_id,
                         mcode,
                         wallet_transaction_reference,
-                        requested_balnce,
+                        ISERVEU_txn_amount,
                         wallet_transaction_type,
                         updated_balance,
                     )
@@ -308,26 +373,26 @@ async def netBanking_transaction_request_(
                 TODO
                 """
                 api_response_data = (
-                    status,
-                    subStatus,
-                    statusDesc,
-                    rrn,
-                    transactionId,
-                    impsRequestData.user_data.beneName,
-                    impsRequestData.user_data.beneAccountNo,
-                    impsRequestData.user_data.beneifsc,
-                    impsRequestData.user_data.benePhoneNo,
-                    impsRequestData.user_data.beneBankName,
-                    clientReferenceNo,
-                    requested_balnce,
-                    impsRequestData.user_data.fundTransferType,
-                    latlong,
-                    impsRequestData.user_data.pincode,
-                    impsRequestData.user_data.custName,
-                    impsRequestData.user_data.custMobNo,
-                    tnx_dateTime,
-                    impsRequestData.user_data.paramA,
-                    impsRequestData.user_data.paramB,
+                    ISERVEU_status,
+                    ISERVEU_sub_status,
+                    ISERVEU_status_desc,
+                    ISERVEU_rrn,
+                    ISERVEU_transaction_id,
+                    ISERVEU_bene_name,
+                    ISERVEU_bene_account_no,
+                    ISERVEU_bene_ifsc,
+                    ISERVEU_bene_phone_no,
+                    ISERVEU_bene_bank_name,
+                    ISERVEU_client_reference_no,
+                    ISERVEU_txn_amount,
+                    ISERVEU_txn_type,
+                    ISERVEU_latlong,
+                    ISERVEU_pincode,
+                    ISERVEU_cust_name,
+                    ISERVEU_cust_mob_no,
+                    ISERVEU_date_time,
+                    ISERVEU_param_a,
+                    ISERVEU_param_b,
                 )
                 cursor.execute(
                     insert_transaction_response_data_query, api_response_data
@@ -353,26 +418,26 @@ async def netBanking_transaction_request_(
             conn.close()
 
     response_data = {
-        "status": status,
-        "subStatus": subStatus,
-        "statusDesc": statusDesc,
-        "rrn": rrn,
-        "transactionId": transactionId,
-        "beneName": impsRequestData.user_data.beneName,
-        "beneAccountNo": impsRequestData.user_data.beneAccountNo,
-        "beneifsc": impsRequestData.user_data.beneifsc,
-        "benePhoneNo": impsRequestData.user_data.benePhoneNo,
-        "beneBankName": impsRequestData.user_data.beneBankName,
-        "clientReferenceNo": clientReferenceNo,
-        "txnAmount": requested_balnce,
-        "txnType": impsRequestData.user_data.fundTransferType,
-        "latlong": latlong,
-        "pincode": impsRequestData.user_data.pincode,
-        "custName": impsRequestData.user_data.custName,
-        "custMobNo": impsRequestData.user_data.custMobNo,
-        "dateTime": tnx_dateTime,
-        "paramA": impsRequestData.user_data.paramA,
-        "paramB": impsRequestData.user_data.paramB,
+        "status": ISERVEU_status,
+        "subStatus": str(ISERVEU_sub_status),
+        "statusDesc": ISERVEU_status_desc,
+        "rrn": ISERVEU_rrn,
+        "transactionId": ISERVEU_transaction_id,
+        "beneName": ISERVEU_bene_name,
+        "beneAccountNo": ISERVEU_bene_account_no,
+        "beneifsc": ISERVEU_bene_ifsc,
+        "benePhoneNo": str(ISERVEU_bene_phone_no),
+        "beneBankName": ISERVEU_bene_bank_name,
+        "clientReferenceNo": ISERVEU_client_reference_no,
+        "txnAmount": ISERVEU_txn_amount,
+        "txnType": ISERVEU_txn_type,
+        "latlong": ISERVEU_latlong,
+        "pincode": str(ISERVEU_pincode),
+        "custName": ISERVEU_cust_name,
+        "custMobNo": str(ISERVEU_cust_mob_no),
+        "dateTime": ISERVEU_date_time,
+        "paramA": ISERVEU_param_a,
+        "paramB": ISERVEU_param_b,
     }
 
     return response_data
@@ -511,7 +576,7 @@ Function to fetch Merchnats Wallet Balance
 """
 
 
-def fetch_wallet_bal(merchant_id: int) -> Union[float, None]:
+def fetch_wallet_bal(merchant_id: int):
     try:
         conn = connect()
 
