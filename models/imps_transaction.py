@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field, field_validator, model_validator
-from decimal import Decimal
 import re
 from datetime import datetime
 from typing import List, Optional
@@ -14,7 +13,7 @@ class UserData(BaseModel):
     benePhoneNo: int = Field(..., description="Mobile Number of beneficiary")
     beneBankName: str = Field(..., description="Bank name of the beneficiary")
     # clientReferenceNo: str = Field(..., min_length=12, max_length=22, description="Customer reference number")
-    amount: Decimal = Field(
+    amount: float = Field(
         ..., description="Amount to be transferred to the beneficiary"
     )
     fundTransferType: str = Field(..., description="Mode of payment (IMPS/NEFT)")
@@ -39,12 +38,6 @@ class TransactionRequest(BaseModel):
     access_token: str
     token_type: str
     user_data: UserData
-
-    @field_validator("user_data", mode="before")
-    def parse_amount(cls, value):
-        if isinstance(value.get("amount"), float):
-            value["amount"] = Decimal(str(value["amount"]))
-        return value
 
     @field_validator("access_token", "token_type")
     def clean_data(cls, v):
@@ -198,7 +191,7 @@ class TransactionResult(BaseModel):
     paramA: str = None
     paramB: str = None
     dateTime: str
-    txnAmount: Decimal
+    txnAmount: float
     txnType: str
 
 
@@ -207,13 +200,6 @@ class StatusResponse(BaseModel):
     message: str
     length: int
     results: List[TransactionResult]
-
-    @field_validator("results", mode="before")
-    def parse_amounts(cls, value):
-        for result in value:
-            if isinstance(result.get("txnAmount"), float):
-                result["txnAmount"] = Decimal(str(result["txnAmount"]))
-        return value
 
 
 class StatusErrorResponse(BaseModel):

@@ -3,8 +3,15 @@ import socket
 from routers.netbanking_txn import router as netbankingRouter
 from routers.auth import router as authRouter
 
-app = FastAPI(redoc_url=None, docs_url=None)
-# app = FastAPI(docs_url=None, redoc_url=None)
+# app = FastAPI(redoc_url=None, docs_url=None)
+app = FastAPI(
+    title="Paythrough Payout",
+    version="1.0.0",
+    swagger_ui_parameters={
+        "syntaxHighlight.theme": "obsidian",
+        "defaultModelsExpandDepth": -1,
+    },
+)
 
 app.include_router(netbankingRouter)
 app.include_router(authRouter)

@@ -7,7 +7,7 @@ from database.connections import connect
 from database.settings import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 
-router = APIRouter(prefix="/api")
+router = APIRouter(prefix="/api", tags=["Auth"])
 
 
 def get_merchant_by_api_credentials(
@@ -61,6 +61,9 @@ def create_access_token(data: dict):
 
 @router.post("/generate-token", response_model=Token)
 async def generate_access_token(request: GenerateTokenIn) -> Token:
+    """
+    First, obtain a token from the here and  use the generated Access Token and Token in every Route to Authenticate
+    """
     merchant_details = get_merchant_by_api_credentials(
         client_id=request.client_id, client_secret=request.client_secret
     )
